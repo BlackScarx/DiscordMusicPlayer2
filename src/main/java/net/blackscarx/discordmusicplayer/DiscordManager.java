@@ -55,7 +55,7 @@ public class DiscordManager {
             }
         });
         jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
-        jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
+        jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer", "https://blackscarx.com"));
         AudioSourceManagers.registerRemoteSources(remoteManager);
         AudioSourceManagers.registerLocalSource(localManager);
         player.addListener(new Musique());
