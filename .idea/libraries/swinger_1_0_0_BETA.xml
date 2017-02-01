@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="swinger-1.0.0-BETA">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/swinger-1.0.0-BETA.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

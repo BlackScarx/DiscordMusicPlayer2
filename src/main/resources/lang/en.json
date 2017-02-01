@@ -1,0 +1,10 @@
+{
+  "login": "Login",
+  "logout": "Logout",
+  "error": "Error",
+  "errorLogin": "The token is invalid.",
+  "errorPermission": "The bot can not connect in this channel",
+  "chooseFileTitle": "Add files",
+  "noMusic": "No music yet.",
+  "deleteOption": "Remove selected."
+}

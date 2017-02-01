@@ -1,0 +1,10 @@
+{
+  "login": "Connection",
+  "logout": "Déconnection",
+  "error": "Erreur",
+  "errorLogin": "Le token indiquer est invalide.",
+  "errorPermission": "Le bot ne peux pas se connecter dans ce channel.",
+  "chooseFileTitle": "Ajouter des fichiers",
+  "noMusic": "Aucune musique.",
+  "deleteOption": "Supprimer la sélection."
+}

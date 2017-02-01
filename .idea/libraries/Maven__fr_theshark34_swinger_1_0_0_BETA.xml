@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: fr.theshark34:swinger:1.0.0-BETA">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/fr/theshark34/swinger/1.0.0-BETA/swinger-1.0.0-BETA.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/fr/theshark34/swinger/1.0.0-BETA/swinger-1.0.0-BETA-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/fr/theshark34/swinger/1.0.0-BETA/swinger-1.0.0-BETA-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
