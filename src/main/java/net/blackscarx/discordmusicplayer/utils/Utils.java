@@ -32,9 +32,6 @@ public class Utils {
 
     public static void savePlaylist(Playlist playlist, File file) {
         try {
-            for (Playlist.Properties properties : playlist.playlist) {
-                System.out.println(properties.identifier + " " + properties.isRemote);
-            }
             FileOutputStream out = new FileOutputStream(file);
             ObjectOutputStream object = new ObjectOutputStream(out);
             object.writeObject(playlist);
@@ -53,9 +50,6 @@ public class Utils {
             if (playlist instanceof Playlist) {
                 object.close();
                 in.close();
-                for (Playlist.Properties properties : ((Playlist) playlist).playlist) {
-                    System.out.println(properties.identifier + " " + properties.isRemote);
-                }
                 return (Playlist) playlist;
             } else {
                 object.close();
