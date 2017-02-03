@@ -126,6 +126,11 @@
             <artifactId>ini4j</artifactId>
             <version>0.5.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-youtube</artifactId>
+            <version>v3-rev179-1.22.0</version>
+        </dependency>
     </dependencies>
 
 </project>

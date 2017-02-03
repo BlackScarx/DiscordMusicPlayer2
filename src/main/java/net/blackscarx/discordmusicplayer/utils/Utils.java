@@ -1,8 +1,14 @@
 package net.blackscarx.discordmusicplayer.utils;
 
+import net.blackscarx.discordmusicplayer.object.Playlist;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URL;
 
 /**
  * Created by BlackScarx on 15-01-17. BlackScarx All right reserved
@@ -22,6 +28,55 @@ public class Utils {
         g2.drawImage(image, 0, 0, null);
         g2.dispose();
         return output;
+    }
+
+    public static void savePlaylist(Playlist playlist, File file) {
+        try {
+            for (Playlist.Properties properties : playlist.playlist) {
+                System.out.println(properties.identifier + " " + properties.isRemote);
+            }
+            FileOutputStream out = new FileOutputStream(file);
+            ObjectOutputStream object = new ObjectOutputStream(out);
+            object.writeObject(playlist);
+            object.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Playlist loadPlaylist(File file) {
+        try {
+            FileInputStream in = new FileInputStream(file);
+            ObjectInputStream object = new ObjectInputStream(in);
+            Object playlist = object.readObject();
+            if (playlist instanceof Playlist) {
+                object.close();
+                in.close();
+                for (Playlist.Properties properties : ((Playlist) playlist).playlist) {
+                    System.out.println(properties.identifier + " " + properties.isRemote);
+                }
+                return (Playlist) playlist;
+            } else {
+                object.close();
+                in.close();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return new Playlist();
+    }
+
+    public static int showDialog(String message, String title) {
+        try {
+            JImage image = new JImage(ImageIO.read(new URL(message)));
+            image.setSize(480, 360);
+            image.setPreferredSize(new Dimension(480, 360));
+            return JOptionPane.showConfirmDialog(null, image, title, JOptionPane.YES_NO_CANCEL_OPTION);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 2;
     }
 
 }

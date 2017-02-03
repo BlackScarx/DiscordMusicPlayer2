@@ -1,5 +1,12 @@
 package net.blackscarx.discordmusicplayer;
 
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.youtube.YouTube;
+import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -15,22 +22,27 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import net.blackscarx.discordmusicplayer.object.MusicLabel;
 import net.blackscarx.discordmusicplayer.utils.AudioPlayerSendHandler;
+import net.blackscarx.discordmusicplayer.utils.Utils;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.exceptions.AccountTypeException;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
+import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -46,6 +58,7 @@ public class DiscordManager {
     public AudioPlayer player = remoteManager.createPlayer();
     public AudioPlayerSendHandler handler = new AudioPlayerSendHandler(player);
     public ObservableList<AudioTrack> playList = FXCollections.observableList(new ArrayList<>());
+    public boolean noMatch = false;
 
     public DiscordManager(String token) throws LoginException, InterruptedException, RateLimitedException {
         playList.addListener(new ListChangeListener<AudioTrack>() {
@@ -54,7 +67,12 @@ public class DiscordManager {
                 DiscordMusicPlayer.instance.mainPanel.setPlayList();
             }
         });
-        jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
+        try {
+            jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
+        } catch (AccountTypeException e) {
+            jda = new JDABuilder(AccountType.CLIENT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
+            JOptionPane.showMessageDialog(null, DiscordMusicPlayer.instance.lang.warningClient, DiscordMusicPlayer.instance.lang.warningClientTitle, JOptionPane.WARNING_MESSAGE);
+        }
         jda.getPresence().setGame(Game.of("powered by DiscordMusicPlayer"));
         AudioSourceManagers.registerRemoteSources(remoteManager);
         AudioSourceManagers.registerLocalSource(localManager);
@@ -102,8 +120,46 @@ public class DiscordManager {
 
     public void addSource(String source, boolean isRemote, boolean wait) {
         Future<Void> add = !isRemote ? localManager.loadItem(source, new AudioLoad()) : remoteManager.loadItem(source, new AudioLoad());
-        if (wait)
-            while (!add.isDone()) ;
+        if (wait) {
+            try {
+                add.get();
+                if (noMatch) {
+                    noMatch = false;
+                    YouTube youtube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
+                        @Override
+                        public void initialize(HttpRequest httpRequest) throws IOException {
+                        }
+                    }).setApplicationName("DiscordMusicPlayer").build();
+                    try {
+                        YouTube.Search.List search = youtube.search().list("id,snippet");
+                        search.setKey("AIzaSyBbS5X3Cf5yJilL5c2m9D3-pX72dRTLdhw");
+                        search.setQ(source);
+                        search.setType("video");
+                        search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/high/url)");
+                        search.setMaxResults(10L);
+                        SearchListResponse searchResponse = search.execute();
+                        List<SearchResult> searchResultList = searchResponse.getItems();
+                        if (searchResultList != null) {
+                            for (SearchResult result : searchResultList) {
+                                if (result.getId().getKind().equals("youtube#video")) {
+                                    int i = Utils.showDialog(result.getSnippet().getThumbnails().getHigh().getUrl(), DiscordMusicPlayer.instance.lang.doUMean + result.getSnippet().getTitle());
+                                    if (i == JOptionPane.YES_OPTION) {
+                                        addSource(result.getId().getVideoId(), true, true);
+                                        return;
+                                    } else if (i == JOptionPane.CANCEL_OPTION) {
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void play() {
@@ -155,7 +211,7 @@ public class DiscordManager {
 
         @Override
         public void noMatches() {
-            System.out.println("No match");
+            noMatch = true;
         }
 
         @Override
@@ -214,8 +270,11 @@ public class DiscordManager {
                     String text = title + "                    ";
                     if (text.length() <= i)
                         i = 0;
-                    StringBuilder builder = new StringBuilder(text + new StringBuilder(text).substring(0, i));
-                    info.setText(builder.substring(i, 35 + i), "   |   " + getFormattedTime() + " ");
+                    try {
+                        StringBuilder builder = new StringBuilder(text + new StringBuilder(text).substring(0, i));
+                        info.setText(builder.substring(i, 35 + i), "   |   " + getFormattedTime() + " ");
+                    } catch (StringIndexOutOfBoundsException ignored) {
+                    }
                     i++;
                 } else {
                     info.setText(noMusic, "");

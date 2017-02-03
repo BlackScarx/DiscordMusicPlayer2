@@ -251,6 +251,8 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
             manager.next();
         } else if (e.getSource().equals(deleteOption)) {
             manager.playList.removeAll(list.getSelectedValuesList());
+        } else if (e.getSource().equals(setting)) {
+
         }
     }
 

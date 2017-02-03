@@ -13,5 +13,8 @@ public class Lang {
     public String chooseFileTitle;
     public String noMusic;
     public String deleteOption;
+    public String warningClientTitle;
+    public String warningClient;
+    public String doUMean;
 
 }
