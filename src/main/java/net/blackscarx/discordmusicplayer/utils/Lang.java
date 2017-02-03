@@ -16,5 +16,7 @@ public class Lang {
     public String warningClientTitle;
     public String warningClient;
     public String doUMean;
+    public String savePlaylist;
+    public String loadPlaylist;
 
 }

@@ -3,6 +3,7 @@ package net.blackscarx.discordmusicplayer.object;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.bandcamp.BandcampAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.http.HttpAudioSourceManager;
+import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.soundcloud.SoundCloudAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.vimeo.VimeoAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
@@ -24,11 +25,14 @@ public class Playlist implements Serializable {
 
     public Playlist(List<AudioTrack> audioTracks) {
         for (AudioTrack track : audioTracks) {
-            boolean isRemote = false;
+            Boolean isRemote = null;
             AudioSourceManager manager = track.getSourceManager();
             if (manager instanceof YoutubeAudioSourceManager || manager instanceof VimeoAudioSourceManager || manager instanceof SoundCloudAudioSourceManager || manager instanceof HttpAudioSourceManager || manager instanceof BandcampAudioSourceManager)
                 isRemote = true;
-            playlist.add(new Properties(isRemote, track.getIdentifier()));
+            else if (manager instanceof LocalAudioSourceManager)
+                isRemote = false;
+            if (isRemote != null)
+                playlist.add(new Properties(isRemote, track.getIdentifier()));
         }
     }
 

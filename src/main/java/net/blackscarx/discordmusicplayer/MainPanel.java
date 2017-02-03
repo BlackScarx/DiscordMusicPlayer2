@@ -5,7 +5,9 @@ import fr.theshark34.swinger.Swinger;
 import net.blackscarx.discordmusicplayer.object.Channel;
 import net.blackscarx.discordmusicplayer.object.Guild;
 import net.blackscarx.discordmusicplayer.object.MusicLabel;
+import net.blackscarx.discordmusicplayer.object.Playlist;
 import net.blackscarx.discordmusicplayer.utils.JImage;
+import net.blackscarx.discordmusicplayer.utils.Utils;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -55,6 +57,8 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
     public JButton next = new JButton(new ImageIcon(Swinger.getResource("next.png")));
     public MusicLabel info = new MusicLabel(instance.lang.noMusic, "");
     public JMenuItem deleteOption = new JMenuItem(instance.lang.deleteOption);
+    public JButton save = new JButton(new ImageIcon(Swinger.getResource("save.png")));
+    public JButton load = new JButton(new ImageIcon(Swinger.getResource("load.png")));
 
     public MainPanel() {
         this.orBackground = Swinger.getResource("debian.jpg");
@@ -149,6 +153,14 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
         next.addActionListener(this);
         next.setBounds(600, 35, 25, 25);
         info.setBounds(630, 35, 320, 25);
+        save.setOpaque(false);
+        save.setFocusable(false);
+        save.addActionListener(this);
+        save.setBounds(510, 95, 25, 25);
+        load.setOpaque(false);
+        load.setFocusable(false);
+        load.addActionListener(this);
+        load.setBounds(510, 125, 25, 25);
 
         deleteOption.addActionListener(this);
 
@@ -165,6 +177,8 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
         panel.add(play);
         panel.add(pause);
         panel.add(next);
+        panel.add(save);
+        panel.add(load);
         info.add(panel);
 
     }
@@ -252,7 +266,38 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
         } else if (e.getSource().equals(deleteOption)) {
             manager.playList.removeAll(list.getSelectedValuesList());
         } else if (e.getSource().equals(setting)) {
-            
+
+        } else if (e.getSource().equals(save)) {
+            JFileChooser chooser = new JFileChooser(new File("."));
+            chooser.setMultiSelectionEnabled(false);
+            chooser.resetChoosableFileFilters();
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setFileFilter(new FileNameExtensionFilter("DiscordMusicPlayerPlaylist", "dmplaylist"));
+            chooser.setDialogTitle(instance.lang.savePlaylist);
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File file;
+                if (!chooser.getSelectedFile().getName().endsWith(".dmplaylist")) {
+                    file = new File(chooser.getSelectedFile().getPath().concat(".dmplaylist"));
+                } else {
+                    file = chooser.getSelectedFile();
+                }
+                Utils.savePlaylist(new Playlist(manager.playList), file);
+            }
+        } else if (e.getSource().equals(load)) {
+            JFileChooser chooser = new JFileChooser(new File("."));
+            chooser.setMultiSelectionEnabled(false);
+            chooser.resetChoosableFileFilters();
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            chooser.setFileFilter(new FileNameExtensionFilter("DiscordMusicPlayerPlaylist", "dmplaylist"));
+            chooser.setDialogTitle(instance.lang.loadPlaylist);
+            if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.getSelectedFile().exists()) {
+                    Playlist playlist = Utils.loadPlaylist(chooser.getSelectedFile());
+                    for (Playlist.Properties properties : playlist.playlist) {
+                        manager.addSource(properties.identifier, properties.isRemote, true);
+                    }
+                }
+            }
         }
     }
 

@@ -9,5 +9,7 @@
   "deleteOption": "Remove selected.",
   "warningClientTitle": "Warning !",
   "warningClient": "You have just logged in with a client account.\nAvoid using the software with a client account, otherwise the account will be banned.",
-  "doUMean": "Do u mean?  |  "
+  "doUMean": "Do u mean?  |  ",
+  "savePlaylist": "Save playlist.",
+  "loadPlaylist": "Load playlist"
 }

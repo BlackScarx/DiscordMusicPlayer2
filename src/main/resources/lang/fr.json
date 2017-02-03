@@ -9,5 +9,7 @@
   "deleteOption": "Supprimer la sélection.",
   "warningClientTitle": "Attention !",
   "warningClient": "Vous venez de vous connecter avec un compte client.\nEvitez d'utiliser le logiciel avec un compte client sous peine que le compte sois banni.",
-  "doUMean": "Voulez vous dire?  |  "
+  "doUMean": "Voulez vous dire?  |  ",
+  "savePlaylist": "Sauvegarde d'une playlist.",
+  "loadPlaylist": "Chargement d'une playlist."
 }
