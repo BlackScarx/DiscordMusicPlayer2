@@ -266,7 +266,14 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
         } else if (e.getSource().equals(deleteOption)) {
             manager.playList.removeAll(list.getSelectedValuesList());
         } else if (e.getSource().equals(setting)) {
-
+            JDialog settingsDialog = new JDialog(instance.mainFrame, instance.lang.settings, true);
+            settingsDialog.setLocationRelativeTo(instance.mainFrame);
+            Point loc = settingsDialog.getLocation();
+            settingsDialog.setLocation(new Point(((int) loc.getX()) - 300, ((int) loc.getY()) - 150));
+            settingsDialog.setSize(600, 300);
+            settingsDialog.setResizable(false);
+            settingsDialog.setVisible(true);
+            settingsDialog.setContentPane(new SettingsPanel());
         } else if (e.getSource().equals(save)) {
             JFileChooser chooser = new JFileChooser(new File("."));
             chooser.setMultiSelectionEnabled(false);
@@ -367,4 +374,16 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
     public void mouseExited(MouseEvent e) {
 
     }
+
+    public class SettingsPanel extends JPanel {
+
+        public JButton button = new JButton();
+
+        public SettingsPanel() {
+
+
+        }
+
+    }
+
 }

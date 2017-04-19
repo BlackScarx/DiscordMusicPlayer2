@@ -5,6 +5,7 @@ package net.blackscarx.discordmusicplayer.utils;
  */
 public class Lang {
 
+    public String name;
     public String login;
     public String logout;
     public String error;
@@ -18,5 +19,6 @@ public class Lang {
     public String doUMean;
     public String savePlaylist;
     public String loadPlaylist;
+    public String settings;
 
 }
