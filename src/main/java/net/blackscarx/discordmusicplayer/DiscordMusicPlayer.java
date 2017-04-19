@@ -28,7 +28,6 @@ public class DiscordMusicPlayer {
         Gson gson = new Gson();
         for (String first : Alpha.list) {
             for (String second : Alpha.list) {
-                System.out.println(first + second);
                 InputStream langIs;
                 if ((langIs = DiscordMusicPlayer.class.getResourceAsStream("/lang/" + first + second + ".json")) != null) {
                     langs.add(gson.fromJson(new InputStreamReader(langIs, "UTF-8"), Lang.class));

@@ -7,6 +7,7 @@ import net.blackscarx.discordmusicplayer.object.Guild;
 import net.blackscarx.discordmusicplayer.object.MusicLabel;
 import net.blackscarx.discordmusicplayer.object.Playlist;
 import net.blackscarx.discordmusicplayer.utils.JImage;
+import net.blackscarx.discordmusicplayer.utils.Lang;
 import net.blackscarx.discordmusicplayer.utils.Utils;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.exceptions.PermissionException;
@@ -272,8 +273,8 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
             settingsDialog.setLocation(new Point(((int) loc.getX()) - 300, ((int) loc.getY()) - 150));
             settingsDialog.setSize(600, 300);
             settingsDialog.setResizable(false);
-            settingsDialog.setVisible(true);
             settingsDialog.setContentPane(new SettingsPanel());
+            settingsDialog.setVisible(true);
         } else if (e.getSource().equals(save)) {
             JFileChooser chooser = new JFileChooser(new File("."));
             chooser.setMultiSelectionEnabled(false);
@@ -377,10 +378,16 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
 
     public class SettingsPanel extends JPanel {
 
-        public JButton button = new JButton();
+        public JComboBox<String> langs = new JComboBox<>();
+        public JLabel label = new JLabel("Coming soon");
 
         public SettingsPanel() {
 
+            for (Lang lang : DiscordMusicPlayer.langs) {
+                langs.addItem(lang.name);
+            }
+            langs.setFocusable(false);
+            this.add(label);
 
         }
 
