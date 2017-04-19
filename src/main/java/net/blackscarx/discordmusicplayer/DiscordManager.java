@@ -145,10 +145,8 @@ public class DiscordManager {
                                     int i = Utils.showDialog(result.getSnippet().getThumbnails().getHigh().getUrl(), DiscordMusicPlayer.instance.lang.doUMean + result.getSnippet().getTitle());
                                     if (i == JOptionPane.YES_OPTION) {
                                         addSource(result.getId().getVideoId(), true, true);
-                                        return;
-                                    } else if (i == JOptionPane.CANCEL_OPTION) {
-                                        return;
                                     }
+                                    return;
                                 }
                             }
                         }
