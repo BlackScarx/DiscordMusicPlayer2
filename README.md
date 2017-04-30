@@ -1,3 +1,4 @@
 # DiscordMusicPlayer2
 DiscordMusicPlayer V2
-Enjoy
+
+With JDA and Lavaplayer API
