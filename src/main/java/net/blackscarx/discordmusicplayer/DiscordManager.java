@@ -272,8 +272,9 @@ public class DiscordManager {
                         i = 0;
                     try {
                         StringBuilder builder = new StringBuilder(text + new StringBuilder(text).substring(0, i));
-                        info.setText(builder.substring(i, 35 + i), "   |   " + getFormattedTime() + " ");
-                    } catch (StringIndexOutOfBoundsException ignored) {
+                        info.setText(builder.substring(i, (text.length() < 35 ? text.length() - 1 : 35) + i), "   |   " + getFormattedTime() + " ");
+                    } catch (StringIndexOutOfBoundsException e) {
+                        e.printStackTrace();
                     }
                     i++;
                 } else {
