@@ -2,10 +2,7 @@ package net.blackscarx.discordmusicplayer;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import fr.theshark34.swinger.Swinger;
-import net.blackscarx.discordmusicplayer.object.Channel;
-import net.blackscarx.discordmusicplayer.object.Guild;
-import net.blackscarx.discordmusicplayer.object.MusicLabel;
-import net.blackscarx.discordmusicplayer.object.Playlist;
+import net.blackscarx.discordmusicplayer.object.*;
 import net.blackscarx.discordmusicplayer.utils.JImage;
 import net.blackscarx.discordmusicplayer.utils.Lang;
 import net.blackscarx.discordmusicplayer.utils.Utils;
@@ -62,6 +59,7 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
     public JButton load = new JButton(new ImageIcon(Swinger.getResource("load.png")));
 
     public MainPanel() {
+        Config.load();
         this.orBackground = Swinger.getResource("debian.jpg");
         background = orBackground.getScaledInstance(960, 540, 0);
         this.setLayout(new BorderLayout());
@@ -69,6 +67,7 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
         JPanel pageStart = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pageStart.setOpaque(false);
         tokenField.setPreferredSize(new Dimension(500, 25));
+        tokenField.setText(Config.config.token);
         login.setOpaque(false);
         login.setFocusable(false);
         login.addActionListener(this);
@@ -194,6 +193,8 @@ public class MainPanel extends JPanel implements ActionListener, ItemListener, C
         if (e.getSource().equals(login)) {
             try {
                 manager = new DiscordManager(tokenField.getText());
+                Config.config.token = tokenField.getText();
+                Config.save();
                 setGuild();
                 status.setTexture(Swinger.getResource("green.png"));
                 login.setEnabled(false);
