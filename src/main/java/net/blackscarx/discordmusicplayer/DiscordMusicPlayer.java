@@ -2,7 +2,6 @@ package net.blackscarx.discordmusicplayer;
 
 import com.google.gson.Gson;
 import fr.theshark34.swinger.Swinger;
-import net.blackscarx.discordmusicplayer.object.Alpha;
 import net.blackscarx.discordmusicplayer.utils.Lang;
 
 import java.io.InputStream;
@@ -26,8 +25,8 @@ public class DiscordMusicPlayer {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         Gson gson = new Gson();
-        for (String first : Alpha.list) {
-            for (String second : Alpha.list) {
+        for (char first = 'a'; first <= 'z'; first++) {
+            for (char second = 'a'; second <= 'z'; second++) {
                 InputStream langIs;
                 if ((langIs = DiscordMusicPlayer.class.getResourceAsStream("/lang/" + first + second + ".json")) != null) {
                     langs.add(gson.fromJson(new InputStreamReader(langIs, "UTF-8"), Lang.class));

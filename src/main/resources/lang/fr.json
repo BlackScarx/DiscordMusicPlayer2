@@ -1,7 +1,7 @@
 {
   "name": "Français",
-  "login": "Connection",
-  "logout": "Déconnection",
+  "login": "Connexion",
+  "logout": "Déconnexion",
   "error": "Erreur",
   "errorLogin": "Le token indiquer est invalide.",
   "errorPermission": "Le bot ne peux pas se connecter dans ce channel.",
